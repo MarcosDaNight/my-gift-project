@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { firestore } from '../../firebaseConfig';
-import { collection, addDoc, onSnapshot, deleteDoc, getDocs } from 'firebase/firestore';
+import { supabase } from '../../supabaseClient';
+import { useNavigate } from 'react-router-dom';
+import { fetchMessages, addMessage, deleteAllMessages } from '../../services/messageService';
 import './Messages.css';
 
 function Messages() {
@@ -10,28 +11,53 @@ function Messages() {
     const [name, setName] = useState('');
     const [message, setMessage] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
+
 
     useEffect(() => {
-        console.log("Connecting to Firestore...");
-        const unsubscribe = onSnapshot(collection(firestore, 'messages'), snapshot => {
-            const messagesData = [];
-            snapshot.forEach(doc => messagesData.push({ ...doc.data(), id: doc.id }));
+        const getMessages = async () => {
+            const messagesData = await fetchMessages();
             setMessages(messagesData);
-            console.log("Received messages:", messagesData);
-        }, (error) => {
-            console.error("Error connecting to Firestore:", error);
-        });
+        };
 
-        return () => unsubscribe();
+        getMessages();
+
+        const subscription = supabase
+            .channel('public:messages')
+            .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
+                setMessages(prevMessages => [...prevMessages, payload.new]);
+            })
+            .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'messages' }, payload => {
+                setMessages(prevMessages => prevMessages.filter(msg => msg.id !== payload.old.id));
+            })
+            .subscribe();
+
+        return () => {
+            supabase.removeChannel(subscription);
+        };
     }, []);
 
-    const addMessage = async () => {
+    const handleAddMessage = async () => {
         if (name && message) {
-            console.log("Adding message:", { name, message });
-            await addDoc(collection(firestore, 'messages'), { name, message });
-            setName('');
-            setMessage('');
-            setShowModal(false);
+            const success = await addMessage(name, message);
+            if (success) {
+                setName('');
+                setMessage('');
+                setShowModal(false);
+            }
+        }
+    };
+
+    const handleDeleteAllMessages = async () => {
+        if (password === 'mgdn2024') {
+            const success = await deleteAllMessages();
+            if (success) {
+                setMessages([]);
+                setShowDeleteModal(false);
+                setPassword('');
+            }
+        } else {
+            alert('Senha incorreta!');
         }
     };
 
@@ -39,20 +65,6 @@ function Messages() {
         if (messages.length > 0) {
             const randomIndex = Math.floor(Math.random() * messages.length);
             alert(`${messages[randomIndex].name}: ${messages[randomIndex].message}`);
-        }
-    };
-
-    const deleteAllMessages = async () => {
-        if (password === 'mgdn2024') {
-            console.log("Deleting all messages...");
-            const querySnapshot = await getDocs(collection(firestore, 'messages'));
-            querySnapshot.forEach(async (doc) => {
-                await deleteDoc(doc.ref);
-            });
-            setShowDeleteModal(false);
-            setPassword('');
-        } else {
-            alert('Senha incorreta!');
         }
     };
 
@@ -64,7 +76,7 @@ function Messages() {
                 <button onClick={() => setShowModal(true)} className="add-message-button">Adicionar Mensagem</button>
                 <button onClick={randomMessage} className="random-message-button">Ver Mensagem Aleatória</button>
                 <button onClick={() => setShowDeleteModal(true)} className="delete-messages-button">Apagar Todas as Mensagens</button>
-                <button onClick={() => window.location.href = '/'} className="back-button">Voltar</button>
+                <button onClick={() => navigate('/')} className="back-button">Voltar</button>
             </div>
             <div className="message-list">
                 {messages.length > 0 && (
@@ -98,7 +110,7 @@ function Messages() {
                             onChange={(e) => setMessage(e.target.value)} 
                             maxLength="2000"
                         ></textarea>
-                        <button onClick={addMessage} className="submit-message-button">Enviar Mensagem</button>
+                        <button onClick={handleAddMessage} className="submit-message-button">Enviar Mensagem</button>
                     </div>
                 </div>
             )}
@@ -114,7 +126,7 @@ function Messages() {
                             value={password} 
                             onChange={(e) => setPassword(e.target.value)} 
                         />
-                        <button onClick={deleteAllMessages} className="submit-message-button">Apagar</button>
+                        <button onClick={handleDeleteAllMessages} className="submit-message-button">Apagar</button>
                     </div>
                 </div>
             )}

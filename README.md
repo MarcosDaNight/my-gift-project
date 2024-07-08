@@ -1,70 +1,68 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# My Gift Project
 
-## Available Scripts
+Este é um projeto de presente personalizado, criado para proporcionar uma experiência única e divertida para a Patrielly. O projeto inclui uma galeria de fotos, uma galeria de memes, uma seção de mensagens e uma página especial com uma interação engraçada.
 
-In the project directory, you can run:
+## Funcionalidades
 
-### `npm start`
+1. **Galeria de Fotos**: Exibe uma coleção de fotos com navegação para avançar e retornar entre as fotos.
+2. **Galeria de Memes**: Exibe uma coleção de memes com navegação para avançar e retornar entre os memes.
+3. **Mensagens**: Permite que os usuários deixem mensagens para Patrielly. As mensagens são salvas no Firebase Firestore.
+4. **Página Especial**: Uma página interativa que pergunta "Você vai comer meu c*zinho?" com botões de resposta. O botão "Não" foge do cursor, e o botão "Sim" faz explodir confetes na tela.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Tecnologias Utilizadas
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- React
+- Firebase Firestore
+- CSS
+- GitHub Pages para deploy
 
-### `npm test`
+## Configuração do Projeto
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. Clone este repositório:
 
-### `npm run build`
+   ```sh
+   git clone git@github.com:MarcosDaNight/my-gift-project.git
+   cd my-gift-project
+   ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+2. Instale as dependências:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+   ```sh
+   npm install
+   ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+3. Configure as variáveis de ambiente:
 
-### `npm run eject`
+   Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis (substitua com suas credenciais do Firebase):
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+   ```env
+   REACT_APP_FIREBASE_API_KEY=your_api_key
+   REACT_APP_FIREBASE_AUTH_DOMAIN=your_auth_domain
+   REACT_APP_FIREBASE_PROJECT_ID=your_project_id
+   REACT_APP_FIREBASE_STORAGE_BUCKET=your_storage_bucket
+   REACT_APP_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
+   REACT_APP_FIREBASE_APP_ID=your_app_id
+   ```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+4. Inicie o servidor de desenvolvimento:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+   ```sh
+   npm start
+   ```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Deploy
 
-## Learn More
+Para fazer o deploy no GitHub Pages, execute o seguinte comando:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```sh
+npm run deploy
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Contribuições
 
-### Code Splitting
+Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou pull requests.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Licença
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Este projeto está licenciado sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
